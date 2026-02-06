@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f0c29">
+    <title>Future eBook - Monjurul Haque</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --secondary: #bc13fe;
+            --bg: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        h1 { margin: 0; color: var(--primary); font-family: 'Orbitron', sans-serif; font-size: 1.4rem; letter-spacing: 1px; }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            padding-bottom: 60px; /* Space for footer */
+        }
+
+        /* ----- Cover Page View ----- */
+        #cover-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .book-cover {
+            width: 220px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.2);
+            border: 3px solid var(--secondary);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+        .book-cover:hover { transform: scale(1.03); }
+
+        .read-btn {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            border: none;
+            padding: 14px 50px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(188, 19, 254, 0.4);
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .read-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(188, 19, 254, 0.6); }
+
+        /* Ad Section on Cover */
+        .ad-banner {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 15px 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            backdrop-filter: blur(5px);
+        }
+        .ad-banner a { color: var(--primary); text-decoration: none; font-weight: bold; display: block; margin-top: 5px;}
+
+        /* ----- PDF Reader View ----- */
+        #pdf-view {
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            height: 100%;
+            background-color: #1a1a2e;
+        }
+
+        /* PDF Controls Toolbar */
+        .pdf-controls {
+            background: rgba(0,0,0,0.6);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .control-btn {
+            background: transparent; border: none; color: var(--primary); font-size: 1.2rem; padding: 5px 10px; cursor: pointer;
+        }
+        #page-num { font-family: 'Orbitron', sans-serif; color: #fff; }
+
+        /* PDF Canvas Container */
+        #pdf-container {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+            background-color: #121212; /* Dark background for PDF viewer */
+        }
+        #pdf-canvas {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            background-color: #fff; /* Ensure the PDF page itself is white */
+        }
+
+        /* Footer */
+        footer {
+            position: fixed; bottom: 0; width: 100%;
+            background: rgba(15, 12, 41, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+        }
+
+        /* Install Prompt */
+        #install-prompt {
+            position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+            padding: 15px 20px; border-radius: 12px; border: 1px solid var(--primary);
+            display: none; text-align: center; width: 85%; max-width: 350px; z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.3);
+        }
+        #install-prompt button {
+            background: var(--primary); color: #000; border: none; padding: 8px 20px;
+            margin-top: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-family: 'Orbitron', sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="control-btn" id="back-btn" style="display: none; position: absolute; left: 10px;" onclick="showCover()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>NeuroRead</h1>
+    </header>
+
+    <div class="main-content">
+        
+        <div id="cover-view">
+            <img src="cover.jpg" alt="Book Cover" class="book-cover" onerror="this.src='https://via.placeholder.com/220x320/bc13fe/ffffff?text=No+Cover';">
+            
+            <h2 style="margin-bottom: 5px; color: #fff;">ভিনচি কোড</h2> <p style="color: #aaa; margin-bottom: 25px;">একটি রোমাঞ্চকর উপন্যাস</p> <button class="read-btn" onclick="openBook()">
+                <i class="fas fa-book-reader"></i> পড়া শুরু করুন
+            </button>
+
+            <div class="ad-banner">
+                <p style="font-size: 0.9rem; color: #ccc; margin-bottom: 5px;">স্পনসর্ড:</p>
+                <p>🚀 আপনার ক্যারিয়ারের সেরা গাইডলাইন</p>
+                <a href="https://economics-2.github.io/Master-Strategic-Guide/about.html" target="_blank">
+                    ভিজিট করুন: মাস্টার স্ট্র্যাটেজিক গাইড <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+        </div>
+
+        <div id="pdf-view">
+            <div class="pdf-controls">
+                <button class="control-btn" id="prev"><i class="fas fa-chevron-left"></i></button>
+                <div>
+                    <span id="page-num"></span> / <span id="page-count"></span>
+                </div>
+                <button class="control-btn" id="next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div id="pdf-container">
+                <canvas id="pdf-canvas"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Developed & Designed by <strong style="color: var(--secondary);">Monjurul Haque</strong>
+    </footer>
+
+    <div id="install-prompt">
+        <p style="font-weight: bold; font-size: 1.1rem; margin-bottom: 5px;">⚠️ অ্যাপটি ইন্সটল করুন!</p>
+        <p style="font-size: 0.9rem; color: #ccc;">সেরা অভিজ্ঞতার জন্য হোম স্ক্রিনে যুক্ত করুন।</p>
+        <button onclick="installApp()">INSTALL NOW</button>
+        <button onclick="closeInstall()" style="background: transparent; color: #aaa; margin-left: 10px;">Later</button>
+    </div>
+
+    <script>
+        // --- PDF.js কনফিগারেশন ---
+        // আপনার পিডিএফ ফাইলের নাম এখানে দিন
+        const url = 'vinchi.pdf'; 
+
+        let pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 1.5, // পিডিএফ জুম লেভেল (প্রয়োজনে বাড়াতে/کমাতে পারেন)
+            canvas = document.getElementById('pdf-canvas'),
+            ctx = canvas.getContext('2d');
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+
+        function renderPage(num) {
+            pageRendering = true;
+            pdfDoc.getPage(num).then(function(page) {
+                // মোবাইল ডিভাইসের প্রস্থ অনুযায়ী স্কেল সেট করা
+                const containerWidth = document.getElementById('pdf-container').clientWidth;
+                const viewport = page.getViewport({scale: 1});
+                scale = (containerWidth - 40) / viewport.width; // 40px প্যাডিং বাদ দিয়ে
+                const scaledViewport = page.getViewport({scale: scale});
+
+                canvas.height = scaledViewport.height;
+                canvas.width = scaledViewport.width;
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: scaledViewport
+                };
+                const renderTask = page.render(renderContext);
+
+                renderTask.promise.then(function() {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+            document.getElementById('page-num').textContent = num;
+        }
+
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        function onPrevPage() {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+        document.getElementById('prev').addEventListener('click', onPrevPage);
+
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+        document.getElementById('next').addEventListener('click', onNextPage);
+
+        // --- অ্যাপ নেভিগেশন লজিক ---
+        function openBook() {
+            document.getElementById('cover-view').style.display = 'none';
+            document.getElementById('pdf-view').style.display = 'flex';
+            document.getElementById('back-btn').style.display = 'block';
+            
+            // পিডিএফ লোড করা শুরু হবে যখন প্রথমবার "পড়া শুরু করুন" এ ক্লিক হবে
+            if (!pdfDoc) {
+                pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+                    pdfDoc = pdfDoc_;
+                    document.getElementById('page-count').textContent = pdfDoc.numPages;
+                    renderPage(pageNum);
+                }).catch(function(error) {
+                    console.error('Error loading PDF:', error);
+                    alert('পিডিএফ ফাইলটি লোড করা যাচ্ছে না। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করুন অথবা ফাইলের নাম সঠিক কিনা দেখুন।');
+                });
+            }
+        }
+
+        function showCover() {
+            document.getElementById('cover-view').style.display = 'flex';
+            document.getElementById('pdf-view').style.display = 'none';
+            document.getElementById('back-btn').style.display = 'none';
+        }
+        
+        // স্ক্রিন রিসাইজ হলে পিডিএফ পুনরায় রেন্ডার করা
+        window.addEventListener('resize', function() {
+             if(pdfDoc && document.getElementById('pdf-view').style.display === 'flex') {
+                 renderPage(pageNum);
+             }
+        });
+
+
+        // --- PWA ইন্সটল লজিক ---
+        let deferredPrompt;
+        const installPrompt = document.getElementById('install-prompt');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(() => installPrompt.style.display = 'block', 3000);
+            }
+        });
+
+        function installApp() {
+            installPrompt.style.display = 'none';
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                });
+            }
+        }
+        function closeInstall() {
+             installPrompt.style.display = 'none';
+        }
+
+        // সার্ভিস ওয়ার্কার রেজিস্টার
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.error('SW reg failed:', err));
+        }
+    </script>
+</body>
+</html>
