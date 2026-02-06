@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f0c29">
+    <meta name="description" content="ফিউচারিস্টিক ই-বুক রিডার অ্যাপ।">
+    
+    <meta property="og:title" content="Future eBook | Monjurul Haque">
+    <meta property="og:description" content="স্মার্ট স্টাডি এবং ইকোনমিক্স এর আধুনিক ই-বুক কালেকশন।">
+
+    <title>Future eBook - Monjurul Haque</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --secondary: #bc13fe;
+            --bg: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styling */
+        header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            text-align: center;
+            border-bottom: var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 0 15px var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Back Button (Hidden initially) */
+        #back-btn {
+            position: absolute;
+            left: 15px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* --- COVER SECTION (New) --- */
+        #cover-section {
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-in;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-img {
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--secondary);
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.5); /* Glowing effect */
+            margin-bottom: 20px;
+        }
+
+        .start-btn {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            border: none;
+            padding: 12px 40px;
+            color: #000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        .start-btn:active { transform: scale(0.95); }
+
+        /* --- PDF SECTION (Hidden initially) --- */
+        #pdf-section {
+            display: none;
+            width: 100%;
+            height: 80vh; /* Full view height */
+            margin-top: 10px;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff; /* PDF background */
+        }
+
+        /* Ad Section */
+        .ad-section {
+            background: linear-gradient(45deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
+            border: 1px solid var(--primary);
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            animation: pulse 2s infinite;
+            max-width: 90%;
+        }
+
+        .ad-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 20px;
+            background: var(--secondary);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: var(--border);
+            margin-top: auto;
+        }
+
+        /* Install Prompt */
+        #install-prompt {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95); border: 1px solid var(--primary);
+            padding: 15px; border-radius: 10px; display: none; z-index: 1000;
+            width: 85%; text-align: center; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(0, 243, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button id="back-btn" onclick="showCover()"><i class="fas fa-arrow-left"></i> Back</button>
+        <h1><i class="fas fa-book-reader"></i> NeuroRead</h1>
+    </header>
+
+    <div id="cover-section">
+        <img src="cover.jpg" alt="Book Cover" class="cover-img">
+        
+        <h2 style="color: #fff; margin-bottom: 5px;">ভিনচি কোড</h2>
+        <p style="color: #ccc; margin-bottom: 20px;">মঞ্জুরুল হক | লেকচারার (অর্থনীতি)</p>
+
+        <div class="ad-section">
+            <h4 style="color:var(--primary)">🚀 মাস্টার স্ট্র্যাটেজিক গাইড</h4>
+            <p style="font-size:0.8rem; margin:5px 0;">অর্থনীতি এবং ক্যারিয়ারের সেরা গাইডলাইন।</p>
+            <a href="https://economics-2.github.io/Master-Strategic-Guide/about.html" class="ad-btn" target="_blank">
+                বিস্তারিত দেখুন <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <button class="start-btn" onclick="startReading()">
+            <i class="fas fa-book-open"></i> বই পড়ুন
+        </button>
+    </div>
+
+    <div id="pdf-section">
+        <iframe src="vinchi.pdf" title="eBook Reader">
+            <p>আপনার ব্রাউজার পিডিএফ সাপোর্ট করছে না। <a href="vinchi.pdf">ডাউনলোড করুন</a></p>
+        </iframe>
+    </div>
+
+    <footer>
+        <p>Developed by <strong style="color: var(--secondary);">Monjurul Haque</strong></p>
+    </footer>
+
+    <div id="install-prompt">
+        <p style="color: var(--primary); font-weight: bold;">⚠️ অ্যাপটি ইন্সটল করুন</p>
+        <button id="install-btn" style="background:var(--primary); border:none; padding:5px 15px; margin-top:10px; font-weight:bold;">INSTALL NOW</button>
+    </div>
+
+    <script>
+        // ফাংশন: বই পড়া শুরু করা
+        function startReading() {
+            document.getElementById('cover-section').style.display = 'none'; // কভার লুকাও
+            document.getElementById('pdf-section').style.display = 'block';  // পিডিএফ দেখাও
+            document.getElementById('back-btn').style.display = 'block';     // ব্যাক বাটন দেখাও
+            
+            // ফুটার পড়ার সময় বিরক্ত যাতে না করে, তাই লুকাতে পারেন (অপশনাল)
+            document.querySelector('footer').style.display = 'none';
+        }
+
+        // ফাংশন: আবার কভারে ফিরে আসা
+        function showCover() {
+            document.getElementById('cover-section').style.display = 'flex';
+            document.getElementById('pdf-section').style.display = 'none';
+            document.getElementById('back-btn').style.display = 'none';
+            document.querySelector('footer').style.display = 'block';
+        }
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        // Install Prompt Logic
+        let deferredPrompt;
+        const installPrompt = document.getElementById('install-prompt');
+        const installBtn = document.getElementById('install-btn');
+
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                setTimeout(() => installPrompt.style.display = 'block', 3000);
+            });
+        }
+
+        installBtn.addEventListener('click', () => {
+            installPrompt.style.display = 'none';
+            if (deferredPrompt) deferredPrompt.prompt();
+        });
+    </script>
+</body>
+</html>
