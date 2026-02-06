@@ -5,6 +5,7 @@ const ASSETS = [
     '/manifest.json',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap'
+    vinchi.pdf
     // এখানে আপনার পিডিএফ ফাইলের নাম যোগ করতে পারেন অফলাইনে পড়ার জন্য
     // '/1.pdf' 
     সফলতার গাইডলাইন
