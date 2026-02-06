@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f0c29">
+    <meta name="description" content="ফিউচারিস্টিক ই-বুক রিডার অ্যাপ।">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-website-url.com/">
+    <meta property="og:title" content="ফিউচার ই-বুক | মঞ্জুরুল হক">
+    <meta property="og:description" content="স্মার্ট স্টাডি এবং ইকোনমিক্স এর আধুনিক ই-বুক কালেকশন।">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=E-Book+App">
+
+    <title>Future eBook - Monjurul Haque</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --secondary: #bc13fe;
+            --bg: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header Styling */
+        header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            text-align: center;
+            border-bottom: var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* PDF Container */
+        .pdf-container {
+            width: 100%;
+            height: 70vh;
+            margin-top: 20px;
+            border-top: 2px solid var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Ad Section (Specific Requirement) */
+        .ad-section {
+            background: linear-gradient(45deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
+            border: 1px solid var(--primary);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .ad-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 25px;
+            background: var(--secondary);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 0 15px var(--secondary);
+            transition: 0.3s;
+        }
+        
+        .ad-btn:hover { background: var(--primary); box-shadow: 0 0 20px var(--primary); color: #000; }
+
+        /* Install Prompt Styling */
+        #install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--primary);
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: none; /* Hidden by default */
+            z-index: 1000;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        #install-btn {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: var(--border);
+            margin-top: 30px;
+        }
+        
+        footer a { color: var(--primary); text-decoration: none; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 243, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-book-reader"></i> NeuroRead</h1>
+        <p style="font-size: 0.8rem; color: #ccc;">Ultimate E-Book Experience</p>
+    </header>
+
+    <div class="ad-section">
+        <h3>🚀 মাস্টার স্ট্র্যাটেজিক গাইড</h3>
+        <p>অর্থনীতি এবং ক্যারিয়ারের সেরা গাইডলাইন পেতে ভিজিট করুন।</p>
+        <a href="https://economics-2.github.io/Master-Strategic-Guide/about.html" class="ad-btn" target="_blank">
+            বিস্তারিত দেখুন <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="pdf-container">
+        <iframe src="YOUR_PDF_FILE.pdf" title="eBook Reader">
+            <p>আপনার ব্রাউজার পিডিএফ সাপোর্ট করছে না। <a href="YOUR_PDF_FILE.pdf">ডাউনলোড করুন</a></p>
+        </iframe>
+    </div>
+
+    <footer>
+        <p>Developed & Designed by <br> <strong style="color: var(--secondary);">Monjurul Haque</strong></p>
+        <p>Lecturer (Economics) & Web Developer</p>
+        <div style="margin-top: 10px;">
+            <a href="#"><i class="fab fa-facebook fa-lg"></i></a> &nbsp;
+            <a href="#"><i class="fab fa-github fa-lg"></i></a> &nbsp;
+            <a href="#"><i class="fas fa-globe fa-lg"></i></a>
+        </div>
+    </footer>
+
+    <div id="install-prompt">
+        <p style="color: var(--primary); font-weight: bold;">⚠️ অ্যাপটি ইন্সটল নেই!</p>
+        <p style="font-size: 0.9rem;">সেরা অভিজ্ঞতার জন্য অ্যাপটি আপনার মোবাইলে ইন্সটল করুন।</p>
+        <button id="install-btn">INSTALL APP NOW</button>
+    </div>
+
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log('Service Worker Registered'))
+            .catch(err => console.log('SW Failed', err));
+        }
+
+        // Install Prompt Logic
+        let deferredPrompt;
+        const installPrompt = document.getElementById('install-prompt');
+        const installBtn = document.getElementById('install-btn');
+
+        // Check if app is already installed
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+        if (!isStandalone) {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                // Show the custom notification
+                setTimeout(() => {
+                    installPrompt.style.display = 'block';
+                }, 2000); // 2 সেকেন্ড পরে প্রম্পট দেখাবে
+            });
+        }
+
+        installBtn.addEventListener('click', () => {
+            installPrompt.style.display = 'none';
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+
+        // Persistent Reminder (যদি ইন্সটল না করে, ১০ সেকেন্ড পরপর মনে করিয়ে দেবে - optional aggressive mode)
+        /*
+        setInterval(() => {
+            if (!window.matchMedia('(display-mode: standalone)').matches && !deferredPrompt) {
+                 // চাইলে এখানে ম্যানুয়াল মেসেজ বা এলার্ট দিতে পারেন
+            }
+        }, 15000); 
+        */
+    </script>
+</body>
+</html>
